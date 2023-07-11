@@ -114,6 +114,14 @@ public class mbedTLS {
         mbedtls_ssl_conf_ciphersuites(&sslConfig, &mbedTLS.ciphers)
     }
 
+    public static func setPSK(_ psk: Data, _ pskId: String) {
+        psk.withUnsafeBytes { pskPtr in
+            pskId.data(using: .utf8)!.withUnsafeBytes { pskIdPtr in
+                _ = mbedtls_ssl_conf_psk(&sslConfig, pskPtr.baseAddress, psk.count, pskIdPtr.baseAddress, pskId.count)
+            }
+        }
+    }
+
     public static func setMinimumProtocolVersion(_ version: SSLProtocolVersion) {
         mbedtls_ssl_conf_min_version(&sslConfig, MBEDTLS_SSL_MAJOR_VERSION_3, version.rawValue)
     }
