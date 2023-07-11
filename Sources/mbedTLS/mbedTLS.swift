@@ -92,8 +92,8 @@ public class mbedTLS {
         }
     }
 
-    public static func setupSSLContext() throws {
-        let configureSSL = mbedtls_ssl_config_defaults(&sslConfig, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT)
+    public static func setupSSLContext(transport: SSLTransport = .stream) throws {
+        let configureSSL = mbedtls_ssl_config_defaults(&sslConfig, MBEDTLS_SSL_IS_CLIENT, transport.rawValue, MBEDTLS_SSL_PRESET_DEFAULT)
         if configureSSL != 0 { throw mbedTLSError.sslConfiguration }
 
         mbedtls_ssl_conf_rng(&sslConfig, mbedtls_ctr_drbg_random, &counterRandomByteGenerator)
